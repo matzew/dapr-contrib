@@ -74,12 +74,10 @@ func (k *Knative) sendCloudEvent(ctx context.Context, req *bindings.InvokeReques
 	event.SetData(cloudevents.ApplicationCloudEventsJSON, map[string]string{"hello": "Dapr"})
 
 	broker, err := k.eventingClient.EventingV1().Brokers(k.namespace).Get(ctx, k.brokerName, metav1.GetOptions{})
-
 	if apierrors.IsNotFound(err) {
 		//k.logger.Fatalf("Broker %s not found in namespace %s", k.brokerName, k.namespace)
 		return nil, err
 	}
-
 	// Set a target.
 	ctx = cloudevents.ContextWithTarget(ctx, broker.Status.Address.URL.String())
 
